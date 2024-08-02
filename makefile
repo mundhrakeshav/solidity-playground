@@ -21,10 +21,30 @@ coverage_html:
 	@genhtml -o report lcov.info --branch-coverage
 
 test_func:
-	@forge test --fork-url ${RPC} --fork-block-number ${BLOCK} -vvvv --match-test ${P}
+	@fork_url_flag="--fork-url $(RPC)"; \
+	fork_block_flag="--fork-block-number $(BLOCK)"; \
+	if [ "$(RPC)" = "" ]; then \
+        echo "No rpc specified, running locally"; \
+        fork_url_flag=""; \
+    fi; \
+	if [ "$(BLOCK)" = "" ]; then \
+        echo "No block specified, forking latest"; \
+        fork_block_flag=""; \
+    fi; \
+    forge test $${fork_url_flag} $${fork_block_flag} -vvvvv --match-test ${P}
 
 test_func_quick:
-	@forge test --fork-url ${RPC} --fork-block-number ${BLOCK} -vv --match-test ${P}
+	@fork_url_flag="--fork-url $(RPC)"; \
+	fork_block_flag="--fork-block-number $(BLOCK)"; \
+	if [ "$(RPC)" = "" ]; then \
+        echo "No rpc specified, running locally"; \
+        fork_url_flag=""; \
+    fi; \
+	if [ "$(BLOCK)" = "" ]; then \
+        echo "No block specified, forking latest"; \
+        fork_block_flag=""; \
+    fi; \
+    forge test $${fork_url_flag} $${fork_block_flag} -vvv --match-test ${P}
 
 slither:
 	@slither . --exclude-dependencies --checklist --filter-paths "test|lib|script" --sarif slither.sarif> slither.md
