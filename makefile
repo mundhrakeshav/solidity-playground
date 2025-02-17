@@ -6,10 +6,10 @@ snapshot:
 test_all:
 	@forge test --fork-url ${RPC} -vvv
 
-test_latest:
+test_exact:
 	@forge test --fork-url ${RPC} -vvv --match-contract ${P}
 
-test_quick:
+test_exact_at:
 	@forge test --fork-url ${RPC} --fork-block-number ${BLOCK} -vv --match-contract ${P}
 
 coverage:
